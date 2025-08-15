@@ -81,7 +81,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <Sparkles className="h-8 w-8 text-primary-600" />
-              <h1 className="text-xl font-bold text-gray-900">AI Content Generator</h1>
+              <h1 className="text-xl font-bold text-gray-900">Simple Simple AI Content Generator</h1>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 text-gray-700">

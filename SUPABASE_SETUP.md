@@ -1,4 +1,4 @@
-# Supabase Setup Guide for AI Content Generator
+# Supabase Setup Guide for Simple AI Content Generator
 
 This guide will walk you through setting up Supabase for your AI-powered content generator project.
 
@@ -147,7 +147,7 @@ After setting up Supabase:
 
 ## 🎉 You're All Set!
 
-Your AI content generator is now powered by Supabase! You have:
+Your Simple AI Content Generator is now powered by Supabase! You have:
 - ✅ Secure user authentication
 - ✅ PostgreSQL database with RLS
 - ✅ Real-time capabilities

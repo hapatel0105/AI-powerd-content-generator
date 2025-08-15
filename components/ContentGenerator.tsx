@@ -248,10 +248,10 @@ export default function ContentGenerator({ onContentGenerated, userCredits }: Co
                   Generating...
                 </>
               ) : (
-                <>
+                <div className="flex items-center">
                   <Sparkles className="h-4 w-4 mr-2" />
                   Generate Content
-                </>
+                </div>
               )}
             </button>
           </div>

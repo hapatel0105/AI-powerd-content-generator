@@ -96,7 +96,7 @@ export default function DemoPage() {
             </div>
             <div className="flex items-center space-x-2">
               <Sparkles className="h-8 w-8 text-primary-600" />
-              <span className="text-xl font-bold text-gray-900">AI Content Gen</span>
+              <span className="text-xl font-bold text-gray-900">Simple AI Content Gen</span>
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/login" className="btn-secondary">
@@ -114,7 +114,7 @@ export default function DemoPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Try Our AI Content Generator
+            Try Our Simple AI Content Generator
           </h1>
           <p className="text-xl text-gray-600">
             Experience the power of AI-generated content without creating an account

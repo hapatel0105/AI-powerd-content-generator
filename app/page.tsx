@@ -10,7 +10,7 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <Sparkles className="h-8 w-8 text-primary-600" />
-              <span className="text-xl font-bold text-gray-900">AI Content Gen</span>
+              <span className="text-xl font-bold text-gray-900">Simple AI Content Gen</span>
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/login" className="btn-secondary">
@@ -113,10 +113,10 @@ export default function HomePage() {
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Sparkles className="h-6 w-6 text-primary-400" />
-              <span className="text-lg font-semibold">AI Content Generator</span>
+              <span className="text-lg font-semibold">Simple AI Content Generator</span>
             </div>
             <p className="text-gray-400">
-              © 2024 AI Content Generator. All rights reserved.
+              © 2024 Simple AI Content Generator. All rights reserved.
             </p>
           </div>
         </div>
