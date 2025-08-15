@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { connectDB } from '@/lib/mongodb'
-import User from '@/models/User'
+import { createAdminClient } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,12 +15,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Connect to database
-    await connectDB()
+    // Get Supabase admin client
+    const supabase = createAdminClient()
 
     // Find user by email
-    const user = await User.findOne({ email })
-    if (!user) {
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single()
+
+    if (error || !user) {
       return NextResponse.json(
         { message: 'Invalid email or password' },
         { status: 401 }
@@ -39,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { userId: user.id, email: user.email },
       process.env.NEXTAUTH_SECRET || 'fallback-secret',
       { expiresIn: '7d' }
     )
@@ -49,7 +53,7 @@ export async function POST(request: NextRequest) {
       { 
         message: 'Login successful',
         user: {
-          id: user._id,
+          id: user.id,
           name: user.name,
           email: user.email,
           credits: user.credits,

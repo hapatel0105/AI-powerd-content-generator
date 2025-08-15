@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import { connectDB } from '@/lib/mongodb'
-import User from '@/models/User'
+import { createAdminClient } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,11 +21,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Connect to database
-    await connectDB()
+    // Get Supabase admin client
+    const supabase = createAdminClient()
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email })
+    const { data: existingUser, error: checkError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single()
+
     if (existingUser) {
       return NextResponse.json(
         { message: 'User with this email already exists' },
@@ -39,14 +43,26 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, saltRounds)
 
     // Create new user
-    const user = new User({
-      name,
-      email,
-      password: hashedPassword,
-      credits: 10, // Give new users 10 free credits
-    })
+    const { data: newUser, error: insertError } = await supabase
+      .from('users')
+      .insert([
+        {
+          name,
+          email,
+          password: hashedPassword,
+          credits: 10, // Give new users 10 free credits
+        }
+      ])
+      .select()
+      .single()
 
-    await user.save()
+    if (insertError) {
+      console.error('Insert error:', insertError)
+      return NextResponse.json(
+        { message: 'Failed to create user' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json(
       { message: 'User created successfully' },
