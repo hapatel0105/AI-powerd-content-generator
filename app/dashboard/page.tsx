@@ -1,23 +1,52 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { useAuth } from '@/components/AuthProvider'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Sparkles, LogOut, User, Zap, History } from 'lucide-react'
-import toast from 'react-hot-toast'
+import { Sparkles, User, LogOut, Zap, History } from 'lucide-react'
+import { useAuth } from '@/components/AuthProvider'
 import ContentGenerator from '@/components/ContentGenerator'
 import ContentHistory from '@/components/ContentHistory'
+import toast from 'react-hot-toast'
 
-export default function DashboardPage() {
+export default function Dashboard() {
   const { user, loading, signOut } = useAuth()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState('generate')
+  const [userCredits, setUserCredits] = useState(0)
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login')
     }
   }, [loading, user, router])
+
+  useEffect(() => {
+    if (user) {
+      fetchUserCredits()
+    }
+  }, [user])
+
+  const fetchUserCredits = async () => {
+    try {
+      const response = await fetch('/api/user/credits', {
+        method: 'GET',
+        headers: {
+          'x-user-id': user?.id || ''
+        }
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setUserCredits(data.credits)
+      }
+    } catch (error) {
+      console.error('Error fetching user credits:', error)
+    }
+  }
+
+  const handleContentGenerated = () => {
+    // Refresh user credits after content generation
+    fetchUserCredits()
+  }
 
   const handleLogout = async () => {
     try {
@@ -58,6 +87,11 @@ export default function DashboardPage() {
               <div className="flex items-center space-x-2 text-gray-700">
                 <User className="h-5 w-5" />
                 <span className="font-medium">{user.user_metadata?.name || user.email}</span>
+              </div>
+              <div className="flex items-center space-x-2 text-primary-700 bg-primary-50 px-3 py-2 rounded-lg">
+                <Sparkles className="h-5 w-5" />
+                <span className="font-medium">{userCredits}</span>
+                <span className="text-sm">credits</span>
               </div>
               <button
                 onClick={handleLogout}
@@ -101,7 +135,10 @@ export default function DashboardPage() {
 
         {/* Tab Content */}
         {activeTab === 'generate' && (
-          <ContentGenerator />
+          <ContentGenerator 
+            onContentGenerated={handleContentGenerated}
+            userCredits={userCredits}
+          />
         )}
         {activeTab === 'history' && (
           <ContentHistory />
