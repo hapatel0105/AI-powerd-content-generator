@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase'
 
 export async function DELETE(
   request: NextRequest,
@@ -15,11 +15,8 @@ export async function DELETE(
 
     const contentId = params.id
 
-    // Create Supabase client
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
+    // Create Supabase admin client
+    const supabase = createAdminClient()
 
     // Delete content from Supabase (RLS will ensure user can only delete their own content)
     const { data: deletedContent, error: deleteError } = await supabase

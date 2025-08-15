@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,11 +10,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'User ID required' }, { status: 400 })
     }
 
-    // Create Supabase client
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
+    // Create Supabase admin client
+    const supabase = createAdminClient()
 
     // Fetch content from Supabase
     const { data: content, error: contentError } = await supabase
